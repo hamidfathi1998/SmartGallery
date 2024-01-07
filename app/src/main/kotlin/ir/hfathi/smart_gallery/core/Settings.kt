@@ -70,10 +70,6 @@ object Settings {
 
         private val ENABLE_TRASH = booleanPreferencesKey("enable_trashcan")
 
-        @Composable
-        fun rememberTrashEnabled() =
-            rememberPreference(key = ENABLE_TRASH, defaultValue = true)
-
         fun getTrashEnabled(context: Context) =
             context.dataStore.data.map { it[ENABLE_TRASH] ?: true }
 
@@ -82,12 +78,6 @@ object Settings {
         @Composable
         fun rememberLastScreen() =
             rememberPreference(key = LAST_SCREEN, defaultValue = Screen.TimelineScreen.route)
-
-        private val MEDIA_GRID_SIZE = floatPreferencesKey("media_grid_size")
-
-        @Composable
-        fun rememberMediaGridSize() =
-            rememberPreference(key = MEDIA_GRID_SIZE, defaultValue = Dimens.Photo().value)
 
         private val FORCE_THEME = booleanPreferencesKey("force_theme")
 
@@ -108,10 +98,6 @@ object Settings {
             rememberPreference(key = AMOLED_MODE, defaultValue = false)
 
         private val SECURE_MODE = booleanPreferencesKey("secure_mode")
-
-        @Composable
-        fun rememberSecureMode() =
-            rememberPreference(key = SECURE_MODE, defaultValue = false)
 
         fun getSecureMode(context: Context) =
             context.dataStore.data.map { it[SECURE_MODE] ?: false }
@@ -152,8 +138,6 @@ object Settings {
 
         fun allowVibrations(context: Context) = context.dataStore.data.map { it[ALLOW_VIBRATIONS] ?: true }
 
-        @Composable
-        fun rememberAllowVibrations() = rememberPreference(key = ALLOW_VIBRATIONS, defaultValue = true)
     }
 }
 
