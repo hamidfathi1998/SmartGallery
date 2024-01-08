@@ -24,12 +24,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
-    <!--
-        (OPTIONAL)
-        Requested to bypass another user confirmation requested by
-        ScopedStorage when the user wants to trash, delete or add/remove favorites media
-        TODO: Add UI regarding this choice
-    -->
     <uses-permission android:name="android.permission.MANAGE_MEDIA"
         tools:ignore="ProtectedPermissions" />
 
@@ -55,55 +49,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".feature_node.presentation.standalone.StandaloneActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SmartGallery">
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="com.android.camera.action.REVIEW" />
-                <action android:name="android.provider.action.REVIEW" />
-                <action android:name="android.provider.action.REVIEW_SECURE" />
-
-                <data android:scheme="content"/>
-                <data android:scheme="file"/>
-                <data android:mimeType="image/*"/>
-                <data android:mimeType="video/*"/>
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".feature_node.presentation.picker.PickerActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SmartGallery">
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.PICK"/>
-                <action android:name="android.intent.action.GET_CONTENT"/>
-
-                <data android:mimeType="image/*"/>
-                <data android:mimeType="video/*"/>
-                <data android:mimeType="vnd.android.cursor.dir/image"/>
-                <data android:mimeType="vnd.android.cursor.dir/video"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.OPENABLE"/>
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".feature_node.presentation.wallpaper.SetWallpaperActivity"
-            android:exported="true"
-            android:launchMode="singleInstance">
-            <intent-filter android:label="@string/set_wallpaper">
-                <action android:name="android.intent.action.ATTACH_DATA"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="image/*"/>
             </intent-filter>
         </activity>
 

@@ -13,7 +13,6 @@ import ir.hfathi.smart_gallery.core.Resource
 import ir.hfathi.smart_gallery.feature_node.domain.model.Media
 import ir.hfathi.smart_gallery.feature_node.domain.model.MediaItem
 import ir.hfathi.smart_gallery.feature_node.domain.use_case.MediaUseCases
-import ir.hfathi.smart_gallery.feature_node.presentation.picker.AllowedMedia
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,16 +38,6 @@ fun <T> MutableState<T>.update(newState: T) {
         value = newState
     }
 }
-
-fun MediaUseCases.mediaFlowWithType(
-    albumId: Long,
-    allowedMedia: AllowedMedia
-): Flow<Resource<List<Media>>> =
-    (if (albumId != -1L) {
-        getMediaByAlbumWithTypeUseCase(albumId, allowedMedia)
-    } else {
-        getMediaByTypeUseCase(allowedMedia)
-    }).flowOn(Dispatchers.IO).conflate()
 
 fun MediaUseCases.mediaFlow(albumId: Long, target: String?): Flow<Resource<List<Media>>> =
     (if (albumId != -1L) {

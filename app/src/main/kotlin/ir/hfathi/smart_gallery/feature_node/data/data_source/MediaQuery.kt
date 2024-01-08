@@ -56,62 +56,6 @@ sealed class Query(
         }
     )
 
-    class PhotoQuery: Query(
-        projection = arrayOf(
-            MediaStore.MediaColumns._ID,
-            MediaStore.MediaColumns.DATA,
-            MediaStore.MediaColumns.RELATIVE_PATH,
-            MediaStore.MediaColumns.DISPLAY_NAME,
-            MediaStore.MediaColumns.BUCKET_ID,
-            MediaStore.MediaColumns.DATE_MODIFIED,
-            MediaStore.MediaColumns.DATE_TAKEN,
-            MediaStore.MediaColumns.BUCKET_DISPLAY_NAME,
-            MediaStore.MediaColumns.DURATION,
-            MediaStore.MediaColumns.MIME_TYPE,
-            MediaStore.MediaColumns.ORIENTATION,
-            MediaStore.MediaColumns.IS_FAVORITE,
-            MediaStore.MediaColumns.IS_TRASHED
-        ),
-        bundle = defaultBundle.apply {
-            putString(
-                ContentResolver.QUERY_ARG_SQL_SELECTION,
-                MediaStore.MediaColumns.MIME_TYPE + " like ?"
-            )
-            putStringArray(
-                ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
-                arrayOf("image%")
-            )
-        }
-    )
-
-    class VideoQuery: Query(
-        projection = arrayOf(
-            MediaStore.MediaColumns._ID,
-            MediaStore.MediaColumns.DATA,
-            MediaStore.MediaColumns.RELATIVE_PATH,
-            MediaStore.MediaColumns.DISPLAY_NAME,
-            MediaStore.MediaColumns.BUCKET_ID,
-            MediaStore.MediaColumns.DATE_MODIFIED,
-            MediaStore.MediaColumns.DATE_TAKEN,
-            MediaStore.MediaColumns.BUCKET_DISPLAY_NAME,
-            MediaStore.MediaColumns.DURATION,
-            MediaStore.MediaColumns.MIME_TYPE,
-            MediaStore.MediaColumns.ORIENTATION,
-            MediaStore.MediaColumns.IS_FAVORITE,
-            MediaStore.MediaColumns.IS_TRASHED
-        ),
-        bundle = defaultBundle.apply {
-            putString(
-                ContentResolver.QUERY_ARG_SQL_SELECTION,
-                MediaStore.MediaColumns.MIME_TYPE + " LIKE ?"
-            )
-            putStringArray(
-                ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
-                arrayOf("video%")
-            )
-        }
-    )
-
     class AlbumQuery : Query(
         projection = arrayOf(
             MediaStore.MediaColumns.BUCKET_ID,

@@ -31,10 +31,6 @@ import ir.hfathi.smart_gallery.feature_node.domain.model.PinnedAlbum
 import ir.hfathi.smart_gallery.feature_node.domain.repository.MediaRepository
 import ir.hfathi.smart_gallery.feature_node.domain.util.MediaOrder
 import ir.hfathi.smart_gallery.feature_node.domain.util.OrderType
-import ir.hfathi.smart_gallery.feature_node.presentation.picker.AllowedMedia
-import ir.hfathi.smart_gallery.feature_node.presentation.picker.AllowedMedia.BOTH
-import ir.hfathi.smart_gallery.feature_node.presentation.picker.AllowedMedia.PHOTOS
-import ir.hfathi.smart_gallery.feature_node.presentation.picker.AllowedMedia.VIDEOS
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.map
@@ -47,16 +43,6 @@ class MediaRepositoryImpl(
     override fun getMedia(): Flow<Resource<List<Media>>> =
         context.retrieveMedia {
             it.getMedia(mediaOrder = DEFAULT_ORDER)
-        }
-
-    override fun getMediaByType(allowedMedia: AllowedMedia): Flow<Resource<List<Media>>> =
-        context.retrieveMedia {
-            val query = when (allowedMedia) {
-                PHOTOS -> Query.PhotoQuery()
-                VIDEOS -> Query.VideoQuery()
-                BOTH -> Query.MediaQuery()
-            }
-            it.getMedia(mediaQuery = query, mediaOrder = DEFAULT_ORDER)
         }
 
     override fun getFavorites(mediaOrder: MediaOrder): Flow<Resource<List<Media>>> =
@@ -116,54 +102,6 @@ class MediaRepositoryImpl(
             )
             /** return@retrieveMedia */
             it.getMedia(query)
-        }
-
-    override fun getMediaByAlbumIdWithType(
-        albumId: Long,
-        allowedMedia: AllowedMedia
-    ): Flow<Resource<List<Media>>> =
-        context.retrieveMedia {
-            val query = Query.MediaQuery().copy(
-                bundle = Bundle().apply {
-                    val mimeType = when (allowedMedia) {
-                        PHOTOS -> "image%"
-                        VIDEOS -> "video%"
-                        BOTH -> "%/%"
-                    }
-                    putString(
-                        ContentResolver.QUERY_ARG_SQL_SELECTION,
-                        MediaStore.MediaColumns.BUCKET_ID + "= ? and " + MediaStore.MediaColumns.MIME_TYPE + " like ?"
-                    )
-                    putStringArray(
-                        ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
-                        arrayOf(albumId.toString(), mimeType)
-                    )
-                }
-            )
-            /** return@retrieveMedia */
-            it.getMedia(query)
-        }
-
-    override fun getAlbumsWithType(allowedMedia: AllowedMedia): Flow<Resource<List<Album>>> =
-        context.retrieveAlbums {
-            val query = Query.AlbumQuery().copy(
-                bundle = Bundle().apply {
-                    val mimeType = when (allowedMedia) {
-                        PHOTOS -> "image%"
-                        VIDEOS -> "video%"
-                        BOTH -> "%/%"
-                    }
-                    putString(
-                        ContentResolver.QUERY_ARG_SQL_SELECTION,
-                        MediaStore.MediaColumns.MIME_TYPE + " like ?"
-                    )
-                    putStringArray(
-                        ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
-                        arrayOf(mimeType)
-                    )
-                }
-            )
-            it.getAlbums(query, mediaOrder = MediaOrder.Label(OrderType.Ascending))
         }
 
     override fun getMediaByUri(
