@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ir.hfathi.smart_gallery.BuildConfig
 import ir.hfathi.smart_gallery.R
 import ir.hfathi.smart_gallery.core.Constants
 import ir.hfathi.smart_gallery.ui.theme.GalleryTheme

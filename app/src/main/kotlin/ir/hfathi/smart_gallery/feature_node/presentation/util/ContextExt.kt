@@ -170,12 +170,3 @@ fun rememberWindowInsetsController(): WindowInsetsControllerCompat {
     val window = with(LocalContext.current as Activity) { return@with window }
     return remember { WindowCompat.getInsetsController(window, window.decorView) }
 }
-
-fun Context.restartApplication() {
-    val packageManager: PackageManager = packageManager
-    val intent = packageManager.getLaunchIntentForPackage(packageName)
-    val componentName = intent!!.component
-    val mainIntent = Intent.makeRestartActivityTask(componentName)
-    startActivity(mainIntent)
-    Runtime.getRuntime().exit(0)
-}

@@ -273,7 +273,6 @@ class FileUtils(var context: Context) {
     companion object {
         var FALLBACK_COPY_FOLDER = "upload_part"
         private const val TAG = "FileUtils"
-        private var contentUri: Uri? = null
         private fun fileExists(filePath: String): Boolean {
             val file = File(filePath)
             return file.exists()

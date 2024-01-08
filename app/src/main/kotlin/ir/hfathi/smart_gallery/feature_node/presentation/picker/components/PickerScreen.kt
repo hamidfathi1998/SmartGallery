@@ -46,7 +46,6 @@ import ir.hfathi.smart_gallery.feature_node.presentation.picker.AllowedMedia
 import ir.hfathi.smart_gallery.feature_node.presentation.picker.PickerViewModel
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PickerScreen(
     allowedMedia: AllowedMedia,

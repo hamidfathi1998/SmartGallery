@@ -15,7 +15,6 @@ data class MediaUseCases(
     val getMediaFavoriteUseCase = GetMediaFavoriteUseCase(repository)
     val getMediaTrashedUseCase = GetMediaTrashedUseCase(repository)
     val getMediaByTypeUseCase = GetMediaByTypeUseCase(repository)
-    val getMediaByUriUseCase = GetMediaByUriUseCase(repository)
     val getMediaListByUrisUseCase = GetMediaListByUrisUseCase(repository)
     val mediaHandleUseCase = MediaHandleUseCase(repository, context)
     val insertPinnedAlbumUseCase = InsertPinnedAlbumUseCase(repository)

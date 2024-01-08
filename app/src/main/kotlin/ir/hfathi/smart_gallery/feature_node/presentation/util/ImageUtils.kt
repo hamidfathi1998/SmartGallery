@@ -22,10 +22,6 @@ import java.io.IOException
 
 val sdcardRegex = "^/storage/[A-Z0-9]+-[A-Z0-9]+/.*$".toRegex()
 
-fun List<Media>.canBeTrashed(): Boolean {
-    return find { it.path.matches(sdcardRegex) } == null
-}
-
 /**
  * first pair = trashable
  * second pair = non-trashable
