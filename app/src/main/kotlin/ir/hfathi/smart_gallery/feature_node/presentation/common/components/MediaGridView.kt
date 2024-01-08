@@ -22,6 +22,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
@@ -36,9 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.integration.compose.rememberGlidePreloadingData
 import ir.hfathi.smart_gallery.R
@@ -75,6 +78,19 @@ fun MediaGridView(
     isScrolling: MutableState<Boolean>,
     onMediaClick: (media: Media) -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+    exoPlayer.prepare()
+    exoPlayer.volume = 0f
+    val exoPlayerMediaId = remember { mutableStateOf(-1L) }
+    DisposableEffect(exoPlayer) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+    LaunchedEffect(key1 = exoPlayerMediaId.value) { exoPlayer.stop() }
+
+
     val stringToday = stringResource(id = R.string.header_today)
     val stringYesterday = stringResource(id = R.string.header_yesterday)
 
@@ -113,6 +129,7 @@ fun MediaGridView(
         LaunchedEffect(gridState.isScrollInProgress) {
             isScrolling.value = gridState.isScrollInProgress
         }
+
         Box {
             LazyVerticalGrid(
                 state = gridState,
@@ -185,9 +202,14 @@ fun MediaGridView(
                                 val (media, preloadRequestBuilder) = preloadingData[mediaIndex]
                                 MediaComponent(
                                     media = media,
+                                    exoPlayer = exoPlayer,
                                     selectionState = selectionState,
                                     selectedMedia = selectedMedia,
                                     preloadRequestBuilder = preloadRequestBuilder,
+                                    thisMediaIsPlayNow = exoPlayerMediaId.value == media.id,
+                                    onTapToDisplayPreVideos = {
+                                        exoPlayerMediaId.value = it
+                                    },
                                     onItemLongClick = {
                                         if (allowSelection) {
                                             feedbackManager.vibrate()
@@ -214,14 +236,19 @@ fun MediaGridView(
                         val (media, preloadRequestBuilder) = preloadingData[mediaIndex]
                         MediaComponent(
                             media = media,
+                            exoPlayer = exoPlayer,
                             selectionState = selectionState,
                             selectedMedia = selectedMedia,
                             preloadRequestBuilder = preloadRequestBuilder,
+                            thisMediaIsPlayNow = exoPlayerMediaId.value == media.id,
                             onItemLongClick = {
                                 if (allowSelection) {
                                     feedbackManager.vibrate()
                                     toggleSelection(mediaState.media.indexOf(it))
                                 }
+                            },
+                            onTapToDisplayPreVideos = {
+                                exoPlayerMediaId.value = it
                             },
                             onItemClick = {
                                 if (selectionState.value && allowSelection) {

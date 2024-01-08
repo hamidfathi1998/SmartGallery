@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.RequestBuilder
 import ir.hfathi.smart_gallery.feature_node.domain.model.Media
 import ir.hfathi.smart_gallery.ui.theme.Shapes
@@ -19,19 +20,31 @@ import ir.hfathi.smart_gallery.ui.theme.Shapes
 @Composable
 fun LazyGridItemScope.MediaComponent(
     media: Media,
+    exoPlayer: ExoPlayer,
     selectionState: MutableState<Boolean>,
     selectedMedia: SnapshotStateList<Media>,
     preloadRequestBuilder: RequestBuilder<Drawable>,
+    thisMediaIsPlayNow: Boolean = false,
+    onTapToDisplayPreVideos: (Long) -> Unit,
     onItemClick: (Media) -> Unit,
     onItemLongClick: (Media) -> Unit,
 ) {
     val isSelected = remember { mutableStateOf(false) }
     MediaImage(
         media = media,
+        onTapToDisplayPreVideos = onTapToDisplayPreVideos,
         preloadRequestBuilder = preloadRequestBuilder,
         selectionState = selectionState,
         selectedMedia = selectedMedia,
         isSelected = isSelected,
+        exoPlayer = exoPlayer,
+        thisMediaIsPlayNow = thisMediaIsPlayNow,
+        onItemClick = {
+            onItemClick(media)
+            if (selectionState.value) {
+                isSelected.value = !isSelected.value
+            }
+        },
         modifier = Modifier
             .clip(Shapes.small)
             .animateItemPlacement()

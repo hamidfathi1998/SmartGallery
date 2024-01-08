@@ -30,6 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,7 +62,7 @@ fun SetupScreen(
         firstLaunch = false
         permissionGranted = it.all { item -> item.value }
     }
-    val appName = "${stringResource(id = R.string.app_name)} v${BuildConfig.VERSION_NAME}"
+    val appName = stringResource(id = R.string.app_name)
     LaunchedEffect(permissionGranted) {
         if (permissionGranted) {
             onPermissionGranted()
@@ -109,9 +110,9 @@ fun SetupScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_gallery_thumbnail),
+                painter = painterResource(id = R.mipmap.ic_launcher_round),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = Color.Unspecified,
                 modifier = Modifier.size(48.dp)
             )
             Text(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,9 +20,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.integration.compose.rememberGlidePreloadingData
 import com.bumptech.glide.signature.MediaStoreSignature
@@ -50,6 +53,17 @@ fun PickerMediaScreen(
     val gridState = rememberLazyGridState()
     val isCheckVisible = rememberSaveable { mutableStateOf(allowSelection) }
     val feedbackManager = FeedbackManager.rememberFeedbackManager()
+    val context = LocalContext.current
+    val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+    exoPlayer.prepare()
+    exoPlayer.volume = 0f
+    val exoPlayerMediaId = remember { mutableStateOf(-1L) }
+    DisposableEffect(exoPlayer) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+    LaunchedEffect(key1 = exoPlayerMediaId.value) { exoPlayer.stop() }
 
     /** Glide Preloading **/
     val preloadingData = rememberGlidePreloadingData(
@@ -118,6 +132,8 @@ fun PickerMediaScreen(
                         media = media,
                         selectionState = selectionState,
                         selectedMedia = selectedMedia,
+                        exoPlayer = exoPlayer,
+                        thisMediaIsPlayNow = exoPlayerMediaId.value == media.id,
                         preloadRequestBuilder = preloadRequestBuilder,
                         onItemLongClick = {
                             feedbackManager.vibrate()
@@ -131,6 +147,9 @@ fun PickerMediaScreen(
                             } else {
                                 selectedMedia.remove(it)
                             }
+                        },
+                        onTapToDisplayPreVideos = {
+                            exoPlayerMediaId.value = it
                         },
                         onItemClick = {
                             feedbackManager.vibrate()
