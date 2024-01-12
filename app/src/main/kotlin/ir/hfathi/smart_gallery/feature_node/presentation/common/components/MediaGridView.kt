@@ -206,7 +206,7 @@ fun MediaGridView(
                                     selectionState = selectionState,
                                     selectedMedia = selectedMedia,
                                     preloadRequestBuilder = preloadRequestBuilder,
-                                    thisMediaIsPlayNow = exoPlayerMediaId.value == media.id,
+                                    thisMediaIsPlayNow = (exoPlayerMediaId.value == media.id && media.duration != null),
                                     onTapToDisplayPreVideos = {
                                         exoPlayerMediaId.value = it
                                     },
